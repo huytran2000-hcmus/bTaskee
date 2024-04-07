@@ -27,15 +27,15 @@ func New() (*restful, error) {
 	e := echo.New()
 
 	// services
-	taskSVC := service.NewPricing()
+	pricingSVC := service.NewPricing()
 
 	// handlers
-	pricingH := NewPricingHandler(taskSVC)
+	pricingH := NewPricingHandler(pricingSVC)
 
 	apiBase := e.Group("/api")
 	apiV1 := apiBase.Group("/v1")
 	{
-		apiV1.POST("/pricing:calculate", pricingH.calculatePricing)
+		apiV1.POST("/price:calculate", pricingH.calculatePricing)
 	}
 
 	return &restful{

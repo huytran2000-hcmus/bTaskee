@@ -3,8 +3,10 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/huytran2000-hcmus/bTaskee/pricing/internal/model"
 )
 
@@ -22,6 +24,7 @@ var (
 	ErrWorkingLessThanMinimum   = errors.New("working hours less than minimum hours")
 	ErrWorkingMoreThanMaximum   = errors.New("working hours more than maximum hours")
 	ErrHouseTypeNotFound        = errors.New("house type not found")
+	ErrFailedValidation         = errors.New("failed validation")
 )
 
 var (
@@ -30,25 +33,34 @@ var (
 )
 
 type Pricing interface {
-	GetPricing(ctx context.Context, req model.CalculatePriceRequest) (model.PricingResponse, error)
+	GetPricing(ctx context.Context, req model.CalculatePriceRequest) (model.CalculatePriceResponse, error)
 }
 
 func NewPricing() *pricing {
-	return &pricing{}
+	return &pricing{
+		validator: validator.New(),
+	}
 }
 
-type pricing struct{}
+type pricing struct {
+	validator *validator.Validate
+}
 
-func (s pricing) GetPricing(ctx context.Context, req model.CalculatePriceRequest) (model.PricingResponse, error) {
-	var res model.PricingResponse
-	toDate := req.To.Truncate(24 * time.Hour)
-	fromDate := req.From.Truncate(24 * time.Hour)
+func (s pricing) GetPricing(ctx context.Context, req model.CalculatePriceRequest) (model.CalculatePriceResponse, error) {
+	var res model.CalculatePriceResponse
+	err := s.validator.Struct(req)
+	if err != nil {
+		return res, fmt.Errorf("%w: %w", ErrFailedValidation, err)
+	}
+
+	toDate := req.ToTime.Truncate(24 * time.Hour)
+	fromDate := req.FromTime.Truncate(24 * time.Hour)
 
 	if !toDate.Equal(fromDate) {
 		return res, ErrWorkingsNotInTheSameDate
 	}
 
-	workingHours := req.From.Sub(req.To)
+	workingHours := req.ToTime.Sub(req.FromTime)
 	if workingHours < MinimumWorkingHours {
 		return res, ErrWorkingLessThanMinimum
 	}

@@ -15,6 +15,7 @@ import (
 
 	"github.com/huytran2000-hcmus/bTaskee/booking/config"
 	"github.com/huytran2000-hcmus/bTaskee/booking/internal/infra/mongodb"
+	"github.com/huytran2000-hcmus/bTaskee/booking/internal/infra/pricing_api"
 	"github.com/huytran2000-hcmus/bTaskee/booking/internal/service"
 	"github.com/labstack/echo/v4"
 )
@@ -32,9 +33,10 @@ func New() (*restful, error) {
 	if err != nil {
 		return nil, err
 	}
+	pricingRepo := pricing_api.New()
 
 	// services
-	taskSVC := service.NewTask(mongoDB)
+	taskSVC := service.NewTask(mongoDB, pricingRepo)
 
 	// handlers
 	taskH := newTaskHandler(taskSVC)

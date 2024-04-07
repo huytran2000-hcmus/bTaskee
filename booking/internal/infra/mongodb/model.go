@@ -61,10 +61,21 @@ func toMongoDBTask(task *model.Task) *Task {
 		WorkingDetails: WorkingDetails{
 			HouseType:    string(task.WorkingDetails.HouseType),
 			ServiceTypes: toServiceTypeString(task.WorkingDetails.ServiceTypes),
-			From:         task.WorkingDetails.From,
-			To:           task.WorkingDetails.To,
+			From:         task.WorkingDetails.FromTime,
+			To:           task.WorkingDetails.ToTime,
 		},
-		Note: task.Note,
+		Tasker: Tasker{
+			ID:    task.Tasker.ID,
+			Name:  task.Tasker.Name,
+			Email: task.Tasker.Email,
+			Phone: task.Tasker.Phone,
+			Identification: Identification{
+				CMND: task.Tasker.Identification.CMND,
+				CCCD: task.Tasker.Identification.CCCD,
+			},
+		},
+		Note:  task.Note,
+		Total: task.Total,
 	}
 }
 
@@ -82,8 +93,8 @@ func toModelTask(task *Task) *model.Task {
 		WorkingDetails: model.WorkingDetails{
 			HouseType:    model.HouseType(task.WorkingDetails.HouseType),
 			ServiceTypes: toModelServiceType(task.WorkingDetails.ServiceTypes),
-			From:         task.WorkingDetails.From,
-			To:           task.WorkingDetails.To,
+			FromTime:     task.WorkingDetails.From,
+			ToTime:       task.WorkingDetails.To,
 		},
 		Tasker: model.Tasker{
 			ID:    task.Tasker.ID,

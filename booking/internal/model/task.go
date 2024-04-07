@@ -20,9 +20,10 @@ type ServiceType string
 type HouseType string
 
 type CreateTaskRequest struct {
-	Customer         Customer       `json:"customer"`
-	AssignedLocation Location       `json:"assigned_location"`
-	WorkingDetails   WorkingDetails `json:"working_details"`
+	Customer         Customer       `json:"customer" validate:"required"`
+	AssignedLocation Location       `json:"assigned_location" validate:"required"`
+	WorkingDetails   WorkingDetails `json:"working_details" validate:"required"`
+	Tasker           Tasker         `json:"tasker" validate:"required"`
 	Note             string         `json:"note"`
 }
 
@@ -37,33 +38,33 @@ type Task struct {
 }
 
 type Tasker struct {
-	ID             string         `json:"id"`
-	Name           string         `json:"name"`
-	Email          string         `json:"email"`
-	Phone          string         `json:"phone"`
-	Identification Identification `json:"identification"`
+	ID             string         `json:"id" validate:"required"`
+	Name           string         `json:"name" validate:"required"`
+	Email          string         `json:"email" validate:"required,email"`
+	Phone          string         `json:"phone" validate:"required,e164"`
+	Identification Identification `json:"identification" validate:"required"`
 }
 
 type Identification struct {
-	CMND string `json:"cmnd"`
-	CCCD string `json:"cccd"`
+	CMND string `json:"cmnd" validate:"number,len=9"`
+	CCCD string `json:"cccd" validate:"number,len=12"`
 }
 
 type Customer struct {
-	Name  string `json:"customer_name"`
-	Email string `json:"email"`
-	Phone string `json:"phone"`
+	Name  string `json:"name" validate:"required"`
+	Email string `json:"email" validate:"required,email"`
+	Phone string `json:"phone" validate:"required,e164"`
 }
 
 type Location struct {
-	Address string `json:"address"`
+	Address string `json:"address" validate:"required"`
 }
 
 type WorkingDetails struct {
-	HouseType    HouseType     `json:"house_type"`
-	ServiceTypes []ServiceType `json:"service_types"`
-	From         time.Time     `json:"from"`
-	To           time.Time     `json:"to"`
+	HouseType    HouseType     `json:"house_type" validate:"required"`
+	ServiceTypes []ServiceType `json:"service_types" validate:"required,gte=1"`
+	FromTime     time.Time     `json:"from_time" validate:"required,ltfield=ToTime"`
+	ToTime       time.Time     `json:"to_time" validate:"required,gtfield=FromTime"`
 }
 
 func CreateTaskRequestToTask(req *CreateTaskRequest) *Task {
@@ -73,15 +74,9 @@ func CreateTaskRequestToTask(req *CreateTaskRequest) *Task {
 			Email: req.Customer.Email,
 			Phone: req.Customer.Phone,
 		},
-		AssignedLocation: Location{
-			Address: req.AssignedLocation.Address,
-		},
-		WorkingDetails: WorkingDetails{
-			HouseType:    req.WorkingDetails.HouseType,
-			ServiceTypes: req.WorkingDetails.ServiceTypes,
-			From:         req.WorkingDetails.From,
-			To:           req.WorkingDetails.To,
-		},
-		Note: req.Note,
+		AssignedLocation: req.AssignedLocation,
+		WorkingDetails:   req.WorkingDetails,
+		Tasker:           req.Tasker,
+		Note:             req.Note,
 	}
 }

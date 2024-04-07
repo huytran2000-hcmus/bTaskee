@@ -15,6 +15,9 @@ type Config struct {
 	// DBUser string `env:"DB_USER" envDefault:"btaskee"`
 	// DBPass string `env:"DB_PASS" envDefault:"secret"`
 	DBName string `env:"DB_NAME" envDefault:"booking"`
+
+	// Pricing API
+	CalcalatePriceURI string `env:"CALCULATE_PRICE_URI" envDefault:"http://localhost:8081/api/v1/price:calcalate"`
 }
 
 func LoadEnv() Config {

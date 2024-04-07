@@ -16,12 +16,12 @@ type ServiceType string
 type HouseType string
 
 type CalculatePriceRequest struct {
-	HouseType    HouseType     `json:"house_type"`
-	ServiceTypes []ServiceType `json:"service_types"`
-	From         time.Time     `json:"from"`
-	To           time.Time     `json:"to"`
+	HouseType    HouseType     `json:"house_type" validate:"required"`
+	ServiceTypes []ServiceType `json:"service_types" validate:"required,gte=1"`
+	FromTime     time.Time     `json:"from_time" validate:"required,ltfield=ToTime"`
+	ToTime       time.Time     `json:"to_time" validate:"required,gtfield=FromTime"`
 }
 
-type PricingResponse struct {
+type CalculatePriceResponse struct {
 	Total float64 `json:"total"`
 }

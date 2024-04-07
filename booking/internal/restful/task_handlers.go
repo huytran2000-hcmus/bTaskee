@@ -29,7 +29,12 @@ func (h *taskHandler) createTaskHandler(c echo.Context) error {
 
 	id, err := h.svc.CreateOne(c.Request().Context(), req)
 	if err != nil {
-		return sendErrorResponse(c, http.StatusInternalServerError, err)
+		switch {
+		case errors.Is(err, service.ErrFailedValidation):
+			return sendErrorResponse(c, http.StatusBadRequest, err)
+		default:
+			return sendErrorResponse(c, http.StatusInternalServerError, err)
+		}
 	}
 
 	return sendSuccessResponse(c, http.StatusOK, id, "successly create task")

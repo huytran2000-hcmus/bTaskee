@@ -43,8 +43,8 @@ document:
 mongodb/up:
 	@echo "Spin up mongodb container"
 	docker run \
-		-d --name dev-mongo \
-		--rm \
+		-d \
+		--name dev-mongo \
 		-p 27017:27017 \
 		-e MONGO_INITDB_ROOT_USERNAME=btaskee \
 		-e MONGO_INITDB_ROOT_PASSWORD=secret \
