@@ -7,7 +7,12 @@ help:
 ## run: run the booking application
 .PHONY: run/booking
 run/booking:
-	go run booking/cmd/main.go
+	cd booking; go run cmd/main.go
+	
+## run: run the pricing application
+.PHONY: run/pricing
+run/pricing:
+	cd pricing; go run cmd/main.go
 
 ## audit: clean up all your code
 .PHONY: audit

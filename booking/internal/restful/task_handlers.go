@@ -24,7 +24,7 @@ func (h *taskHandler) createTaskHandler(c echo.Context) error {
 
 	err := c.Bind(req)
 	if err != nil {
-		return c.String(http.StatusBadRequest, err.Error())
+		return sendErrorResponse(c, http.StatusBadRequest, err)
 	}
 
 	id, err := h.svc.CreateOne(c.Request().Context(), req)

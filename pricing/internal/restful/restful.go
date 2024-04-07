@@ -13,9 +13,8 @@ import (
 
 	"log"
 
-	"github.com/huytran2000-hcmus/bTaskee/booking/config"
-	"github.com/huytran2000-hcmus/bTaskee/booking/internal/infra/mongodb"
-	"github.com/huytran2000-hcmus/bTaskee/booking/internal/service"
+	"github.com/huytran2000-hcmus/bTaskee/pricing/config"
+	"github.com/huytran2000-hcmus/bTaskee/pricing/internal/service"
 	"github.com/labstack/echo/v4"
 )
 
@@ -27,25 +26,16 @@ type restful struct {
 func New() (*restful, error) {
 	e := echo.New()
 
-	// repositories
-	mongoDB, err := mongodb.NewRepository(config.LoadEnv().DBName, config.LoadEnv().DBURI)
-	if err != nil {
-		return nil, err
-	}
-
 	// services
-	taskSVC := service.NewTask(mongoDB)
+	taskSVC := service.NewPricing()
 
 	// handlers
-	taskH := newTaskHandler(taskSVC)
+	pricingH := NewPricingHandler(taskSVC)
 
 	apiBase := e.Group("/api")
 	apiV1 := apiBase.Group("/v1")
-
-	apiTask := apiV1.Group("/tasks")
 	{
-		apiTask.POST("", taskH.createTaskHandler)
-		apiTask.GET("/:id", taskH.getTaskByID)
+		apiV1.POST("/pricing:calculate", pricingH.calculatePricing)
 	}
 
 	return &restful{

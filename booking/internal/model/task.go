@@ -11,8 +11,8 @@ const (
 	ChildCare ServiceType = "childcare"
 
 	TwoRoom   HouseType = "two_room"
-	ThreeType HouseType = "three_room"
-	FourType  HouseType = "four_room"
+	ThreeRoom HouseType = "three_room"
+	FourRoom  HouseType = "four_room"
 )
 
 type ServiceType string
