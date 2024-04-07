@@ -4,15 +4,20 @@ help:
 	@echo 'Usage:'
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/ /'
 
-## run: run the booking application
+## run/booking: run the booking application
 .PHONY: run/booking
 run/booking:
 	cd booking; go run cmd/main.go
 	
-## run: run the pricing application
+## run/pricing: run the pricing application
 .PHONY: run/pricing
 run/pricing:
 	cd pricing; go run cmd/main.go
+
+## run/send: run the send application
+.PHONY: run/send
+run/send:
+	cd send; go run cmd/main.go
 
 ## audit: clean up all your code
 .PHONY: audit
