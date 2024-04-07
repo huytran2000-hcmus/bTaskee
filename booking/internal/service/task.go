@@ -25,13 +25,15 @@ type Task interface {
 type task struct {
 	repo        repository.Repository
 	pricingRepo repository.PricingRepository
+	sendRepo    repository.SendRepository
 	validator   *validator.Validator
 }
 
-func NewTask(repo repository.Repository, pricingRepo repository.PricingRepository) *task {
+func NewTask(repo repository.Repository, pricingRepo repository.PricingRepository, sendRepo repository.SendRepository) *task {
 	return &task{
 		repo:        repo,
 		pricingRepo: pricingRepo,
+		sendRepo:    sendRepo,
 		validator:   validator.New(),
 	}
 }
@@ -53,13 +55,19 @@ func (s task) CreateOne(ctx context.Context, req *model.CreateTaskRequest) (uuid
 
 	calculatePriceRes, err := s.pricingRepo.GetPricing(ctx, calculatePriceReq)
 	if err != nil {
-		return uuid.Nil, fmt.Errorf("%w: %w", ErrFailedUpstreamReq, err)
+		return uuid.Nil, fmt.Errorf("pricing: %w: %w", ErrFailedUpstreamReq, err)
 	}
 	task.Total = calculatePriceRes.Total
 
 	err = s.repo.InsertTask(ctx, task)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("insert task into repository: %w", err)
+	}
+
+	sendTask := model.ToSendTaskRequest(task)
+	_, err = s.sendRepo.SendTask(ctx, sendTask)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("send: %w: %w", ErrFailedUpstreamReq, err)
 	}
 
 	return task.ID, err

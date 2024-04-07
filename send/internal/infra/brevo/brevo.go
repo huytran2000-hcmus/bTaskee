@@ -38,7 +38,6 @@ func (b *Brevo) SendEmail(ctx context.Context, req model.SendTaskRequest) ([]str
 		TemplateId: config.LoadEnv().BrevoTaskAssignedEmailTemplateID,
 		Params:     fromSendTaskRequestToParams(req),
 	})
-
 	if err != nil {
 		return nil, err
 	}
@@ -53,6 +52,8 @@ func (b *Brevo) SendEmail(ctx context.Context, req model.SendTaskRequest) ([]str
 func fromSendTaskRequestToParams(req model.SendTaskRequest) map[string]any {
 	params := map[string]any{}
 
+	params["id"] = req.ID
+
 	params["customer"] = map[string]string{
 		"name":  req.Customer.Name,
 		"email": req.Customer.Email,
@@ -61,8 +62,8 @@ func fromSendTaskRequestToParams(req model.SendTaskRequest) map[string]any {
 
 	params["address"] = req.AssignedLocation.Address
 
-	params["from_time"] = req.WorkingDetails.From
-	params["to_time"] = req.WorkingDetails.To
+	params["from_time"] = req.WorkingDetails.FromTime
+	params["to_time"] = req.WorkingDetails.ToTime
 
 	params["house_type"] = req.WorkingDetails.HouseType
 	params["service_types"] = strings.Join(req.WorkingDetails.ServiceTypes, ",")

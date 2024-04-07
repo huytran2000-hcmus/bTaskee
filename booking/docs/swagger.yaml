@@ -1,0 +1,214 @@
+definitions:
+  model.CreateTaskRequest:
+    properties:
+      assigned_location:
+        $ref: '#/definitions/model.Location'
+      customer:
+        $ref: '#/definitions/model.Customer'
+      note:
+        example: Be here ontime
+        type: string
+      tasker:
+        $ref: '#/definitions/model.Tasker'
+      working_details:
+        $ref: '#/definitions/model.WorkingDetails'
+    required:
+    - assigned_location
+    - customer
+    - tasker
+    - working_details
+    type: object
+  model.Customer:
+    properties:
+      email:
+        example: minhhuy@gmail.com
+        type: string
+      name:
+        example: huy tran
+        type: string
+      phone:
+        example: "+84948337945"
+        type: string
+    required:
+    - email
+    - name
+    - phone
+    type: object
+  model.HouseType:
+    enum:
+    - two_room
+    - three_room
+    - four_room
+    type: string
+    x-enum-varnames:
+    - TwoRoom
+    - ThreeRoom
+    - FourRoom
+  model.Identification:
+    properties:
+      cccd:
+        example: "999999999999"
+        type: string
+      cmnd:
+        example: "888888888"
+        type: string
+    type: object
+  model.Location:
+    properties:
+      address:
+        example: 60 Bến Thành, Quận 1, TP.Hồ Chí Minh
+        type: string
+    required:
+    - address
+    type: object
+  model.ServiceType:
+    enum:
+    - cleaning
+    - childcare
+    type: string
+    x-enum-varnames:
+    - Cleaning
+    - ChildCare
+  model.Task:
+    properties:
+      assigned_location:
+        $ref: '#/definitions/model.Location'
+      customer:
+        $ref: '#/definitions/model.Customer'
+      id:
+        type: string
+      note:
+        type: string
+      tasker:
+        $ref: '#/definitions/model.Tasker'
+      total:
+        type: number
+      working_details:
+        $ref: '#/definitions/model.WorkingDetails'
+    type: object
+  model.Tasker:
+    properties:
+      email:
+        example: minhhuydev2000@gmail.com
+        type: string
+      id:
+        example: "1"
+        type: string
+      identification:
+        $ref: '#/definitions/model.Identification'
+      name:
+        example: huy tran
+        type: string
+      phone:
+        example: "+84948337945"
+        type: string
+    required:
+    - email
+    - id
+    - identification
+    - name
+    - phone
+    type: object
+  model.WorkingDetails:
+    properties:
+      from_time:
+        example: "2024-04-07T09:00:00+07:00"
+        type: string
+      house_type:
+        allOf:
+        - $ref: '#/definitions/model.HouseType'
+        example: two_room
+      service_types:
+        example:
+        - cleaning
+        items:
+          $ref: '#/definitions/model.ServiceType'
+        minItems: 1
+        type: array
+      to_time:
+        example: "2024-04-07T11:00:00+07:00"
+        type: string
+    required:
+    - from_time
+    - house_type
+    - service_types
+    - to_time
+    type: object
+  restful.errorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  restful.successResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is booking apis
+  title: Booking API
+  version: "1.0"
+paths:
+  /api/v1/tasks:
+    post:
+      consumes:
+      - application/json
+      description: Create a new task
+      parameters:
+      - description: Create Task Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/restful.successResponse'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: bad request
+          schema:
+            $ref: '#/definitions/restful.errorResponse'
+      summary: Create a new task
+      tags:
+      - Task
+  /api/v1/tasks/{id}:
+    get:
+      description: Get a task by id
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/restful.successResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Task'
+              type: object
+        "404":
+          description: bad request
+          schema:
+            $ref: '#/definitions/restful.errorResponse'
+      summary: Get a task by id
+      tags:
+      - Task
+swagger: "2.0"

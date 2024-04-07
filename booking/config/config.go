@@ -17,7 +17,10 @@ type Config struct {
 	DBName string `env:"DB_NAME" envDefault:"booking"`
 
 	// Pricing API
-	CalcalatePriceURI string `env:"CALCULATE_PRICE_URI" envDefault:"http://localhost:8081/api/v1/price:calcalate"`
+	CalcalatePriceURI string `env:"CALCULATE_PRICE_URI" envDefault:"http://localhost:8081/api/v1/task:calculate-price"`
+
+	// Send API
+	SendTaskURI string `env:"SEND_TASK_ID" envDefault:"http://localhost:8082/api/v1/task:send"`
 }
 
 func LoadEnv() Config {

@@ -1,0 +1,94 @@
+definitions:
+  model.CalculatePriceRequest:
+    properties:
+      from_time:
+        example: "2024-04-07T09:00:00+07:00"
+        type: string
+      house_type:
+        allOf:
+        - $ref: '#/definitions/model.HouseType'
+        example: three_room
+      service_types:
+        example:
+        - childcare
+        items:
+          $ref: '#/definitions/model.ServiceType'
+        minItems: 1
+        type: array
+      to_time:
+        example: "2024-04-07T11:00:00+07:00"
+        type: string
+    required:
+    - from_time
+    - house_type
+    - service_types
+    - to_time
+    type: object
+  model.HouseType:
+    enum:
+    - two_room
+    - three_room
+    - four_room
+    type: string
+    x-enum-varnames:
+    - TwoRoom
+    - ThreeRoom
+    - FourRoom
+  model.ServiceType:
+    enum:
+    - cleaning
+    - childcare
+    type: string
+    x-enum-varnames:
+    - Cleaning
+    - ChildCare
+  restful.errorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  restful.successResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  description: This is pricing apis
+  title: Pricing API
+  version: "1.0"
+paths:
+  /api/v1/task:calculate-price:
+    post:
+      consumes:
+      - application/json
+      description: Calculate price of a task
+      parameters:
+      - description: Calculate Price Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CalculatePriceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/restful.successResponse'
+            - properties:
+                data:
+                  type: number
+              type: object
+        "400":
+          description: bad request
+          schema:
+            $ref: '#/definitions/restful.errorResponse'
+      summary: Calculate price of a task
+      tags:
+      - Task
+swagger: "2.0"

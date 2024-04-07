@@ -18,7 +18,17 @@ func NewSendHandler(svc service.Send) *sendHandler {
 	}
 }
 
-func (h *sendHandler) send(c echo.Context) error {
+// SendTask send task to tasker
+// @Summary Send task to tasker
+// @Description Send task to tasker
+// @Tags Task
+// @Accept  json
+// @Produce  json
+// @Param   request body model.SendTaskRequest true "Send Task Request"
+// @Success 200 {object} successResponse{data=model.SendTaskResponse} "success"
+// @Failure 400 {object} errorResponse "bad request"
+// @Router /api/v1/task:send [post]
+func (h *sendHandler) sendTask(c echo.Context) error {
 	var req model.SendTaskRequest
 
 	err := c.Bind(&req)
@@ -26,7 +36,7 @@ func (h *sendHandler) send(c echo.Context) error {
 		return sendErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	res, err := h.svc.Send(c.Request().Context(), req)
+	res, err := h.svc.SendTask(c.Request().Context(), req)
 	if err != nil {
 		return sendErrorResponse(c, http.StatusInternalServerError, err)
 	}

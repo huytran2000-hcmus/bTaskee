@@ -5,38 +5,38 @@ import (
 )
 
 type SendTaskRequest struct {
-	ID               string         `json:"id"`
-	Customer         Customer       `json:"customer"`
-	Tasker           Tasker         `json:"tasker"`
-	AssignedLocation Location       `json:"assigned_location"`
-	WorkingDetails   WorkingDetails `json:"working_details"`
-	Note             string         `json:"note"`
-	Total            float64        `json:"total"`
+	ID               string         `json:"id" validate:"required"`
+	Customer         Customer       `json:"customer" validate:"required"`
+	AssignedLocation Location       `json:"assigned_location" validate:"required"`
+	WorkingDetails   WorkingDetails `json:"working_details" validate:"required"`
+	Tasker           Tasker         `json:"tasker" validate:"required"`
+	Note             string         `json:"note" example:"Be here ontime"`
+	Total            float64        `json:"total" validate:"required" example:"400"`
 }
 
 type SendTaskResponse struct {
-	EmailIDs []string `json:"email_ids"`
+	MessageIDs []string `json:"message_ids"`
 }
 
 type Tasker struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-	Phone string `json:"phone"`
+	Name  string `json:"name" validate:"required" example:"huy tran"`
+	Email string `json:"email" validate:"required,email" example:"minhhuydev2000@gmail.com"`
+	Phone string `json:"phone" validate:"required,e164" example:"+84948337945"`
 }
 
 type Customer struct {
-	Name  string `json:"customer_name"`
-	Email string `json:"email"`
-	Phone string `json:"phone"`
+	Name  string `json:"name" validate:"required" example:"huy tran"`
+	Email string `json:"email" validate:"required,email" example:"minhhuy@gmail.com"`
+	Phone string `json:"phone" validate:"required,e164" example:"+84948337945"`
 }
 
 type Location struct {
-	Address string `json:"address"`
+	Address string `json:"address" validate:"required" example:"60 Bến Thành, Quận 1, TP.Hồ Chí Minh"`
 }
 
 type WorkingDetails struct {
-	HouseType    string    `json:"house_type"`
-	ServiceTypes []string  `json:"service_types"`
-	From         time.Time `json:"from"`
-	To           time.Time `json:"to"`
+	HouseType    string    `json:"house_type" validate:"required" example:"two_room"`
+	ServiceTypes []string  `json:"service_types" validate:"required,gte=1" example:"cleaning,childcare"`
+	FromTime     time.Time `json:"from_time" validate:"required,ltfield=ToTime" example:"2024-04-07T09:00:00+07:00"`
+	ToTime       time.Time `json:"to_time" validate:"required,gtfield=FromTime" example:"2024-04-07T11:00:00+07:00"`
 }

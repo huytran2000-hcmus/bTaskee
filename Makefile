@@ -60,3 +60,17 @@ mongodb/down:
 .PHONY: mongosh
 mongosh:
 	docker exec -it dev-mongo mongosh -u btaskee -p secret --authenticationDatabase admin ${dbname}
+
+## build-images: build all docker images
+.PHONY: build-images
+build-images:
+	cd booking; docker build -t huypk2000/booking:latest .
+	cd pricing; docker build -t huypk2000/pricing:latest .
+	cd send; docker build -t huypk2000/send:latest .
+
+## swag: generate all swagger docs
+.PHONY: swag
+swag:
+	cd booking; swag init -g ./cmd/main.go
+	cd pricing; swag init -g ./cmd/main.go
+	cd send; swag init -g ./cmd/main.go

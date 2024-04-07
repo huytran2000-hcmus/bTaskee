@@ -16,8 +16,11 @@ import (
 	"github.com/huytran2000-hcmus/bTaskee/booking/config"
 	"github.com/huytran2000-hcmus/bTaskee/booking/internal/infra/mongodb"
 	"github.com/huytran2000-hcmus/bTaskee/booking/internal/infra/pricing_api"
+	"github.com/huytran2000-hcmus/bTaskee/booking/internal/infra/send_api"
 	"github.com/huytran2000-hcmus/bTaskee/booking/internal/service"
 	"github.com/labstack/echo/v4"
+
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 type restful struct {
@@ -34,9 +37,10 @@ func New() (*restful, error) {
 		return nil, err
 	}
 	pricingRepo := pricing_api.New()
+	sendRepo := send_api.New()
 
 	// services
-	taskSVC := service.NewTask(mongoDB, pricingRepo)
+	taskSVC := service.NewTask(mongoDB, pricingRepo, sendRepo)
 
 	// handlers
 	taskH := newTaskHandler(taskSVC)
@@ -49,6 +53,8 @@ func New() (*restful, error) {
 		apiTask.POST("", taskH.createTaskHandler)
 		apiTask.GET("/:id", taskH.getTaskByID)
 	}
+
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	return &restful{
 		e: e,

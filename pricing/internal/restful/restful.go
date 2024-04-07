@@ -16,6 +16,7 @@ import (
 	"github.com/huytran2000-hcmus/bTaskee/pricing/config"
 	"github.com/huytran2000-hcmus/bTaskee/pricing/internal/service"
 	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 type restful struct {
@@ -35,8 +36,10 @@ func New() (*restful, error) {
 	apiBase := e.Group("/api")
 	apiV1 := apiBase.Group("/v1")
 	{
-		apiV1.POST("/price:calculate", pricingH.calculatePricing)
+		apiV1.POST("/task:calculate-price", pricingH.calculatePrice)
 	}
+
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	return &restful{
 		e: e,

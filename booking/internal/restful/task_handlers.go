@@ -19,6 +19,16 @@ func newTaskHandler(svc service.Task) *taskHandler {
 	}
 }
 
+// CreateTask creates a new task.
+// @Summary Create a new task
+// @Description Create a new task
+// @Tags Task
+// @Accept  json
+// @Produce  json
+// @Param   request body model.CreateTaskRequest true "Create Task Request"
+// @Success 200 {object} successResponse{data=string} "success"
+// @Failure 400 {object} errorResponse "bad request"
+// @Router /api/v1/tasks [post]
 func (h *taskHandler) createTaskHandler(c echo.Context) error {
 	req := &model.CreateTaskRequest{}
 
@@ -40,6 +50,15 @@ func (h *taskHandler) createTaskHandler(c echo.Context) error {
 	return sendSuccessResponse(c, http.StatusOK, id, "successly create task")
 }
 
+// GetTaskByID get a task by id
+// @Summary Get a task by id
+// @Description Get a task by id
+// @Tags Task
+// @Produce  json
+// @Param id path string true "ID"
+// @Success 200 {object} successResponse{data=model.Task} "success"
+// @Failure 404 {object} errorResponse "bad request"
+// @Router /api/v1/tasks/{id} [get]
 func (h *taskHandler) getTaskByID(c echo.Context) error {
 	id, err := parseIDFromURI(c)
 	if err != nil {

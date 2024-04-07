@@ -24,7 +24,7 @@ type CreateTaskRequest struct {
 	AssignedLocation Location       `json:"assigned_location" validate:"required"`
 	WorkingDetails   WorkingDetails `json:"working_details" validate:"required"`
 	Tasker           Tasker         `json:"tasker" validate:"required"`
-	Note             string         `json:"note"`
+	Note             string         `json:"note" example:"Be here ontime"`
 }
 
 type Task struct {
@@ -38,33 +38,33 @@ type Task struct {
 }
 
 type Tasker struct {
-	ID             string         `json:"id" validate:"required"`
-	Name           string         `json:"name" validate:"required"`
-	Email          string         `json:"email" validate:"required,email"`
-	Phone          string         `json:"phone" validate:"required,e164"`
+	ID             string         `json:"id" validate:"required" example:"1"`
+	Name           string         `json:"name" validate:"required" example:"huy tran"`
+	Email          string         `json:"email" validate:"required,email" example:"minhhuydev2000@gmail.com"`
+	Phone          string         `json:"phone" validate:"required,e164" example:"+84948337945"`
 	Identification Identification `json:"identification" validate:"required"`
 }
 
 type Identification struct {
-	CMND string `json:"cmnd" validate:"number,len=9"`
-	CCCD string `json:"cccd" validate:"number,len=12"`
+	CMND string `json:"cmnd" validate:"number,len=9" example:"888888888"`
+	CCCD string `json:"cccd" validate:"number,len=12" example:"999999999999"`
 }
 
 type Customer struct {
-	Name  string `json:"name" validate:"required"`
-	Email string `json:"email" validate:"required,email"`
-	Phone string `json:"phone" validate:"required,e164"`
+	Name  string `json:"name" validate:"required" example:"huy tran"`
+	Email string `json:"email" validate:"required,email" example:"minhhuy@gmail.com"`
+	Phone string `json:"phone" validate:"required,e164" example:"+84948337945"`
 }
 
 type Location struct {
-	Address string `json:"address" validate:"required"`
+	Address string `json:"address" validate:"required" example:"60 Bến Thành, Quận 1, TP.Hồ Chí Minh"`
 }
 
 type WorkingDetails struct {
-	HouseType    HouseType     `json:"house_type" validate:"required"`
-	ServiceTypes []ServiceType `json:"service_types" validate:"required,gte=1"`
-	FromTime     time.Time     `json:"from_time" validate:"required,ltfield=ToTime"`
-	ToTime       time.Time     `json:"to_time" validate:"required,gtfield=FromTime"`
+	HouseType    HouseType     `json:"house_type" validate:"required" example:"two_room"`
+	ServiceTypes []ServiceType `json:"service_types" validate:"required,gte=1" example:"cleaning"`
+	FromTime     time.Time     `json:"from_time" validate:"required,ltfield=ToTime" example:"2024-04-07T09:00:00+07:00"`
+	ToTime       time.Time     `json:"to_time" validate:"required,gtfield=FromTime" example:"2024-04-07T11:00:00+07:00"`
 }
 
 func CreateTaskRequestToTask(req *CreateTaskRequest) *Task {

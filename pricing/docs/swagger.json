@@ -1,0 +1,144 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is pricing apis",
+        "title": "Pricing API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8081",
+    "paths": {
+        "/api/v1/task:calculate-price": {
+            "post": {
+                "description": "Calculate price of a task",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Calculate price of a task",
+                "parameters": [
+                    {
+                        "description": "Calculate Price Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CalculatePriceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/restful.successResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "$ref": "#/definitions/restful.errorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.CalculatePriceRequest": {
+            "type": "object",
+            "required": [
+                "from_time",
+                "house_type",
+                "service_types",
+                "to_time"
+            ],
+            "properties": {
+                "from_time": {
+                    "type": "string",
+                    "example": "2024-04-07T09:00:00+07:00"
+                },
+                "house_type": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.HouseType"
+                        }
+                    ],
+                    "example": "three_room"
+                },
+                "service_types": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/model.ServiceType"
+                    },
+                    "example": [
+                        "childcare"
+                    ]
+                },
+                "to_time": {
+                    "type": "string",
+                    "example": "2024-04-07T11:00:00+07:00"
+                }
+            }
+        },
+        "model.HouseType": {
+            "type": "string",
+            "enum": [
+                "two_room",
+                "three_room",
+                "four_room"
+            ],
+            "x-enum-varnames": [
+                "TwoRoom",
+                "ThreeRoom",
+                "FourRoom"
+            ]
+        },
+        "model.ServiceType": {
+            "type": "string",
+            "enum": [
+                "cleaning",
+                "childcare"
+            ],
+            "x-enum-varnames": [
+                "Cleaning",
+                "ChildCare"
+            ]
+        },
+        "restful.errorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "restful.successResponse": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

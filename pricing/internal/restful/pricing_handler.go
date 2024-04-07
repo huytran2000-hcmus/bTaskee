@@ -18,7 +18,17 @@ func NewPricingHandler(svc service.Pricing) *pricingHandler {
 	}
 }
 
-func (h *pricingHandler) calculatePricing(c echo.Context) error {
+// CalculatePrice calculate price of a task
+// @Summary Calculate price of a task
+// @Description Calculate price of a task
+// @Tags Task
+// @Accept  json
+// @Produce  json
+// @Param   request body model.CalculatePriceRequest true "Calculate Price Request"
+// @Success 200 {object} successResponse{data=float32} "success"
+// @Failure 400 {object} errorResponse "bad request"
+// @Router /api/v1/task:calculate-price [post]
+func (h *pricingHandler) calculatePrice(c echo.Context) error {
 	var req model.CalculatePriceRequest
 
 	err := c.Bind(&req)
