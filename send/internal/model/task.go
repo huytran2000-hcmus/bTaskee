@@ -5,7 +5,7 @@ import (
 )
 
 type SendTaskRequest struct {
-	ID               string         `json:"id" validate:"required"`
+	ID               string         `json:"id" validate:"required" example:"c4824b96-e4ca-49cf-aaea-156604799612"`
 	Customer         Customer       `json:"customer" validate:"required"`
 	AssignedLocation Location       `json:"assigned_location" validate:"required"`
 	WorkingDetails   WorkingDetails `json:"working_details" validate:"required"`

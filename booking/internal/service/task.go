@@ -58,13 +58,16 @@ func (s task) CreateOne(ctx context.Context, req *model.CreateTaskRequest) (uuid
 		return uuid.Nil, fmt.Errorf("pricing: %w: %w", ErrFailedUpstreamReq, err)
 	}
 	task.Total = calculatePriceRes.Total
+	fmt.Printf("total: %+v\n", calculatePriceRes.Total)
 
 	err = s.repo.InsertTask(ctx, task)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("insert task into repository: %w", err)
 	}
 
+	fmt.Printf("task: %+v\n", task)
 	sendTask := model.ToSendTaskRequest(task)
+	fmt.Printf("send-task: %+v\n", sendTask)
 	_, err = s.sendRepo.SendTask(ctx, sendTask)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("send: %w: %w", ErrFailedUpstreamReq, err)

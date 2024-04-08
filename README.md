@@ -7,21 +7,12 @@ The booking service will call the pricing service to calculate the price of a ta
 
 
 ## How to run it?
-There are 3 ways:
+There are 2 ways:
 - Use docker-compose
-- Manually run 3 services and Mongodb in 4 separate terminals
 ```bash
-	cd booking; go run cmd/main.go
+    EMAIL_API_KEY=<The Brevo API key that I send you> docker-compose up --build
 ```
-
-```bash
-	cd pricing; go run cmd/main.go
-```
-
-```bash
-	cd send; go run cmd/main.go
-```
-
+- Manually run Mongodb and 3 services in 4 separate terminals
 ```bash
 	docker run \
 		-d \
@@ -31,11 +22,28 @@ There are 3 ways:
 		-e MONGO_INITDB_ROOT_PASSWORD=secret \
 		mongo:7.0.8
 ```
-All of these commands have their corresponding target in Makefile (use make help to get more info)
+
+```bash
+	cd booking; go run cmd/main.go
+```
+
+```bash
+	cd pricing; go run cmd/main.go
+```
+
+```bash
+	cd send; EMAIL_API_KEY=<The Brevo API key that I send you> go run cmd/main.go
+```
+
+All of these commands have their corresponding target in Makefile (use make help to get more info), remember to run this
+before: 
+```bash
+    export EMAIL_API_KEY=<The Brevo API key that I send you>
+```
 ## How to use it?
-Access to swagger links:
-[](http://localhost:8080/swagger/index.html)
-[](http://localhost:8081/swagger/index.html)
-[](http://localhost:8082/swagger/index.html)
+Access to swagger links:  
+http://localhost:8080/swagger/index.html  
+http://localhost:8081/swagger/index.html  
+http://localhost:8082/swagger/index.html  
 
 There are ready-to-use example requests for you to test.

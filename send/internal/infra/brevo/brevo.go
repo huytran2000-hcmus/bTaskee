@@ -18,7 +18,7 @@ type Brevo struct {
 
 func New() *Brevo {
 	cfg := brevo.NewConfiguration()
-	cfg.AddDefaultHeader("api-key", config.LoadEnv().BrevoAPIKey)
+	cfg.AddDefaultHeader("api-key", config.LoadEnv().EmailAPIKey)
 
 	br := brevo.NewAPIClient(cfg)
 
@@ -35,7 +35,7 @@ func (b *Brevo) SendEmail(ctx context.Context, req model.SendTaskRequest) ([]str
 				Name:  req.Tasker.Name,
 			},
 		},
-		TemplateId: config.LoadEnv().BrevoTaskAssignedEmailTemplateID,
+		TemplateId: config.LoadEnv().TaskAssignedEmailTemplateID,
 		Params:     fromSendTaskRequestToParams(req),
 	})
 	if err != nil {
