@@ -33,7 +33,7 @@ var (
 )
 
 type Pricing interface {
-	GetPricing(ctx context.Context, req model.CalculatePriceRequest) (model.CalculatePriceResponse, error)
+	GetPrice(ctx context.Context, req model.CalculatePriceRequest) (float64, error)
 }
 
 func NewPricing() *pricing {
@@ -46,8 +46,8 @@ type pricing struct {
 	validator *validator.Validate
 }
 
-func (s pricing) GetPricing(ctx context.Context, req model.CalculatePriceRequest) (model.CalculatePriceResponse, error) {
-	var res model.CalculatePriceResponse
+func (s pricing) GetPrice(ctx context.Context, req model.CalculatePriceRequest) (float64, error) {
+	var res float64
 	err := s.validator.Struct(req)
 	if err != nil {
 		return res, fmt.Errorf("%w: %w", ErrFailedValidation, err)
@@ -90,7 +90,7 @@ func (s pricing) GetPricing(ctx context.Context, req model.CalculatePriceRequest
 		return res, ErrHouseTypeNotFound
 	}
 
-	res.Total = rate * pricePerHour * float64(workingHours/time.Hour)
+	res = rate * pricePerHour * float64(workingHours/time.Hour)
 
 	return res, nil
 }

@@ -36,10 +36,13 @@ func (h *pricingHandler) calculatePrice(c echo.Context) error {
 		return sendErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	res, err := h.svc.GetPricing(c.Request().Context(), req)
+	price, err := h.svc.GetPrice(c.Request().Context(), req)
 	if err != nil {
 		return sendErrorResponse(c, http.StatusBadRequest, err)
 	}
 
+	res := model.CalculatePriceResponse{
+		Total: price,
+	}
 	return sendSuccessResponse(c, http.StatusOK, res, "")
 }
