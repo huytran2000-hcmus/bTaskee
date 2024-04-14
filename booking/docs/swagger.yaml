@@ -21,29 +21,19 @@ definitions:
   model.Customer:
     properties:
       email:
-        example: minhhuy@gmail.com
+        example: huy@gmail.com
         type: string
       name:
         example: huy tran
         type: string
       phone:
-        example: "+84948337945"
+        example: "+84948447524"
         type: string
     required:
     - email
     - name
     - phone
     type: object
-  model.HouseType:
-    enum:
-    - two_room
-    - three_room
-    - four_room
-    type: string
-    x-enum-varnames:
-    - TwoRoom
-    - ThreeRoom
-    - FourRoom
   model.Identification:
     properties:
       cccd:
@@ -89,7 +79,7 @@ definitions:
   model.Tasker:
     properties:
       email:
-        example: minhhuydev2000@gmail.com
+        example: <enter your email here>
         type: string
       id:
         example: "1"
@@ -100,7 +90,7 @@ definitions:
         example: huy tran
         type: string
       phone:
-        example: "+84948337945"
+        example: "+84948447525"
         type: string
     required:
     - email
@@ -115,9 +105,8 @@ definitions:
         example: "2024-04-07T09:00:00+07:00"
         type: string
       house_type:
-        allOf:
-        - $ref: '#/definitions/model.HouseType'
         example: two_room
+        type: string
       service_types:
         example:
         - cleaning
@@ -179,7 +168,12 @@ paths:
         "400":
           description: bad request
           schema:
-            $ref: '#/definitions/restful.errorResponse'
+            allOf:
+            - $ref: '#/definitions/restful.errorResponse'
+            - properties:
+                data:
+                  type: string
+              type: object
       summary: Create a new task
       tags:
       - Task
@@ -207,7 +201,12 @@ paths:
         "404":
           description: bad request
           schema:
-            $ref: '#/definitions/restful.errorResponse'
+            allOf:
+            - $ref: '#/definitions/restful.errorResponse'
+            - properties:
+                data:
+                  type: string
+              type: object
       summary: Get a task by id
       tags:
       - Task

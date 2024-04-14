@@ -3,7 +3,6 @@ package restful
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -15,8 +14,7 @@ import (
 
 	"github.com/huytran2000-hcmus/bTaskee/booking/config"
 	"github.com/huytran2000-hcmus/bTaskee/booking/internal/infra/mongodb"
-	"github.com/huytran2000-hcmus/bTaskee/booking/internal/infra/pricing_api"
-	"github.com/huytran2000-hcmus/bTaskee/booking/internal/infra/send_api"
+	"github.com/huytran2000-hcmus/bTaskee/booking/internal/repository"
 	"github.com/huytran2000-hcmus/bTaskee/booking/internal/service"
 	"github.com/labstack/echo/v4"
 
@@ -28,7 +26,7 @@ type restful struct {
 	wg sync.WaitGroup
 }
 
-func New() (*restful, error) {
+func New(pricingRepo repository.PricingRepository, sendRepo repository.SendRepository) (*restful, error) {
 	e := echo.New()
 
 	// repositories
@@ -36,8 +34,6 @@ func New() (*restful, error) {
 	if err != nil {
 		return nil, err
 	}
-	pricingRepo := pricing_api.New()
-	sendRepo := send_api.New()
 
 	// services
 	taskSVC := service.NewTask(mongoDB, pricingRepo, sendRepo)
@@ -61,15 +57,11 @@ func New() (*restful, error) {
 	}, nil
 }
 
-func (r *restful) Run() error {
-	srv := &http.Server{
-		Addr:         fmt.Sprintf(":%d", config.LoadEnv().Port),
-		Handler:      r.e,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 30 * time.Second,
-		IdleTimeout:  1 * time.Minute,
-	}
+func (r *restful) Routes() http.Handler {
+	return r.e
+}
 
+func (r *restful) Run(srv *http.Server) error {
 	shutDownErr := make(chan error)
 	go func() {
 		quit := make(chan os.Signal, 1)

@@ -61,7 +61,19 @@ const docTemplate = `{
                     "400": {
                         "description": "bad request",
                         "schema": {
-                            "$ref": "#/definitions/restful.errorResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/restful.errorResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -108,7 +120,19 @@ const docTemplate = `{
                     "404": {
                         "description": "bad request",
                         "schema": {
-                            "$ref": "#/definitions/restful.errorResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/restful.errorResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -153,7 +177,7 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "example": "minhhuy@gmail.com"
+                    "example": "huy@gmail.com"
                 },
                 "name": {
                     "type": "string",
@@ -161,22 +185,9 @@ const docTemplate = `{
                 },
                 "phone": {
                     "type": "string",
-                    "example": "+84948337945"
+                    "example": "+84948447524"
                 }
             }
-        },
-        "model.HouseType": {
-            "type": "string",
-            "enum": [
-                "two_room",
-                "three_room",
-                "four_room"
-            ],
-            "x-enum-varnames": [
-                "TwoRoom",
-                "ThreeRoom",
-                "FourRoom"
-            ]
         },
         "model.Identification": {
             "type": "object",
@@ -252,7 +263,7 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "example": "minhhuydev2000@gmail.com"
+                    "example": "\u003center your email here\u003e"
                 },
                 "id": {
                     "type": "string",
@@ -267,7 +278,7 @@ const docTemplate = `{
                 },
                 "phone": {
                     "type": "string",
-                    "example": "+84948337945"
+                    "example": "+84948447525"
                 }
             }
         },
@@ -285,11 +296,7 @@ const docTemplate = `{
                     "example": "2024-04-07T09:00:00+07:00"
                 },
                 "house_type": {
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/model.HouseType"
-                        }
-                    ],
+                    "type": "string",
                     "example": "two_room"
                 },
                 "service_types": {
@@ -338,6 +345,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "This is booking apis",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {

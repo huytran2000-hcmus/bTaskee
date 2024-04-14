@@ -2,13 +2,13 @@ definitions:
   model.Customer:
     properties:
       email:
-        example: minhhuy@gmail.com
+        example: huy@gmail.com
         type: string
       name:
         example: huy tran
         type: string
       phone:
-        example: "+84948337945"
+        example: "+84948447524"
         type: string
     required:
     - email
@@ -30,6 +30,7 @@ definitions:
       customer:
         $ref: '#/definitions/model.Customer'
       id:
+        example: c4824b96-e4ca-49cf-aaea-156604799612
         type: string
       note:
         example: Be here ontime
@@ -59,13 +60,13 @@ definitions:
   model.Tasker:
     properties:
       email:
-        example: minhhuydev2000@gmail.com
+        example: <enter your email here>
         type: string
       name:
         example: huy tran
         type: string
       phone:
-        example: "+84948337945"
+        example: "+84948447525"
         type: string
     required:
     - email

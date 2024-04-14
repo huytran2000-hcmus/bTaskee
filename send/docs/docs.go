@@ -79,7 +79,7 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "example": "minhhuy@gmail.com"
+                    "example": "huy@gmail.com"
                 },
                 "name": {
                     "type": "string",
@@ -87,7 +87,7 @@ const docTemplate = `{
                 },
                 "phone": {
                     "type": "string",
-                    "example": "+84948337945"
+                    "example": "+84948447524"
                 }
             }
         },
@@ -121,7 +121,8 @@ const docTemplate = `{
                     "$ref": "#/definitions/model.Customer"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "c4824b96-e4ca-49cf-aaea-156604799612"
                 },
                 "note": {
                     "type": "string",
@@ -160,7 +161,7 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "example": "minhhuydev2000@gmail.com"
+                    "example": "\u003center your email here\u003e"
                 },
                 "name": {
                     "type": "string",
@@ -168,7 +169,7 @@ const docTemplate = `{
                 },
                 "phone": {
                     "type": "string",
-                    "example": "+84948337945"
+                    "example": "+84948447525"
                 }
             }
         },
@@ -236,6 +237,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "This is send apis",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {

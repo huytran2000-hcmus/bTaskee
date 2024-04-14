@@ -19,24 +19,22 @@ run/pricing:
 run/send:
 	cd send; go run cmd/main.go
 
-## audit: clean up all your code
+## audit: clean up all your code in
 .PHONY: audit
-audit: test document
+audit: test
 	@echo 'Tidying and verifying module dependencies...'
-	go mod tidy
-	go mod verify
+	cd booking; go mod tidy; go mod verify
+	cd pricing; go mod tidy; go mod verify
+	cd send; go mod tidy; go mod verify
 
 ## test: run all test
 .PHONY: test
 test:
 	@echo 'Runnings tests'
-	go test -vet=off ./...
+	cd booking; go test -vet=off --count=1 ./...
+	cd pricing; go test -vet=off --count=1 ./...
+	cd send; go test -vet=off  --count=1 ./...
 
-## document: generate the swagger documentation
-.PHONY: document
-document:
-	@echo "Generate swagger documentation..."
-	swag init
 
 ## mongodb\up: spin up mongodb container
 .PHONY: mongodb/up
@@ -56,7 +54,7 @@ mongodb/down:
 	docker stop dev-mongo
 	docker rm dev-mongo
 
-## mongosh: spin down mongodb container
+## mongosh dbname=$1: spin down mongodb container
 .PHONY: mongosh
 mongosh:
 	docker exec -it dev-mongo mongosh -u btaskee -p secret --authenticationDatabase admin ${dbname}
@@ -74,3 +72,15 @@ swag:
 	cd booking; swag init -g ./cmd/main.go
 	cd pricing; swag init -g ./cmd/main.go
 	cd send; swag init -g ./cmd/main.go
+
+## gen-mock: generate mocks
+.PHONY: gen-mock
+gen-mock:
+	cd booking; mockery
+	cd pricing; mockery
+	cd send; mockery
+
+## goconvey: run goconvey
+.PHONY: goconvey
+goconvey:
+	goconvey --port 8800

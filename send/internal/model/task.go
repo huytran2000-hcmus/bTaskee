@@ -20,14 +20,14 @@ type SendTaskResponse struct {
 
 type Tasker struct {
 	Name  string `json:"name" validate:"required" example:"huy tran"`
-	Email string `json:"email" validate:"required,email" example:"minhhuydev2000@gmail.com"`
-	Phone string `json:"phone" validate:"required,e164" example:"+84948337945"`
+	Email string `json:"email" validate:"required,email" example:"<enter your email here>"`
+	Phone string `json:"phone" validate:"required,e164" example:"+84948447525"`
 }
 
 type Customer struct {
 	Name  string `json:"name" validate:"required" example:"huy tran"`
-	Email string `json:"email" validate:"required,email" example:"minhhuy@gmail.com"`
-	Phone string `json:"phone" validate:"required,e164" example:"+84948337945"`
+	Email string `json:"email" validate:"required,email" example:"huy@gmail.com"`
+	Phone string `json:"phone" validate:"required,e164" example:"+84948447524"`
 }
 
 type Location struct {

@@ -160,6 +160,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "This is pricing apis",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {

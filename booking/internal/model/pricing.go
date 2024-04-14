@@ -3,7 +3,7 @@ package model
 import "time"
 
 type CalculatePriceRequest struct {
-	HouseType    HouseType     `json:"house_type"`
+	HouseType    string        `json:"house_type"`
 	ServiceTypes []ServiceType `json:"service_types"`
 	FromTime     time.Time     `json:"from_time"`
 	ToTime       time.Time     `json:"to_time"`

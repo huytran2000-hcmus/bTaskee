@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func parseIDFromURI(c echo.Context) (uuid.UUID, error) {
+func parseUUIDFromURI(c echo.Context) (uuid.UUID, error) {
 	idParam := c.Param("id")
 	id, err := uuid.Parse(idParam)
 	if err != nil {

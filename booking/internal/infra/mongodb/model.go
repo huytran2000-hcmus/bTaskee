@@ -91,7 +91,7 @@ func toModelTask(task *Task) *model.Task {
 			Address: task.AssignedLocation.Address,
 		},
 		WorkingDetails: model.WorkingDetails{
-			HouseType:    model.HouseType(task.WorkingDetails.HouseType),
+			HouseType:    task.WorkingDetails.HouseType,
 			ServiceTypes: toModelServiceType(task.WorkingDetails.ServiceTypes),
 			FromTime:     task.WorkingDetails.From,
 			ToTime:       task.WorkingDetails.To,
